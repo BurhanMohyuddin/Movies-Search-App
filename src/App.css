@@ -37,3 +37,9 @@ small {
 .card-list {
   margin-top: 4rem;
 }
+
+.popular-movie-title{
+  font-size: 2.4rem;
+  margin: 10rem 0rem 0rem ;
+  color: rgb(255, 247, 231);
+}
