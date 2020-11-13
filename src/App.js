@@ -59,6 +59,7 @@ function App() {
       setFilteredSearchResults(x);
     }
   };
+  
   //to filter by date
   let maxOffset = 30;
   let thisYear = (new Date()).getFullYear();
@@ -68,16 +69,19 @@ function App() {
   }
   const yearList = allYears.map((x) => {return(<option key={x}>{x}</option>)});
   
+  
   const handleFiltering = async (e) => {
-    // console.log("date sorting",e);
-    filteredSearchResults.filter((filteredResult) => filteredResult.poster_path).map(filteredResult =>{
-      let dates = filteredResult.release_date;
-      console.log("asdakdkasdhajkd",dates)
-       if(e === dates)
-         setFilteredSearchResults(filteredResult);
-        console.log("date sorting",filteredResult);
-      return <MovieCards movie={filteredResult} key={filteredResult.id} />;
-    })
+    console.log("date filtering", e);
+    const x = filteredSearchResults.filter(m => m.release_date.split("-")[0] === e);
+    setFilteredSearchResults(x);
+    // filteredSearchResults.filter((filteredResult) => filteredResult.poster_path).map(filteredResult => {
+    //   let dates = filteredResult.release_date;
+    //   console.log("asdakdkasdhajkd",dates)
+    //    if(e === dates)
+    //      setFilteredSearchResults(filteredResult);
+    //     console.log("date filtering",filteredResult);
+    //   return <MovieCards movie={filteredResult} key={filteredResult.id} />;
+    // })
 
 
   }
