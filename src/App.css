@@ -53,3 +53,8 @@ small {
 .dropdown {
   margin: 3rem 0rem 0rem ;
 }
+.date-dropdown {
+  margin: auto;
+  border-radius: 8px;
+  float: right;
+}
