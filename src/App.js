@@ -8,11 +8,12 @@ function App() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [filteredSearchResults, setFilteredSearchResults] = useState([]);
   const [orignalSearchResults, setOriginalSearchResults] = useState([]);
-  const [query, setQuery] = useState("");
+  const [filteredByGenre, setFilteredByGenre] = useState([]);
   const [filterByDate, setfilterByDate] = useState({
     firstDate: "",
     lastDate: "",
   });
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const url ="https://api.themoviedb.org/3/movie/popular?api_key=bcf11cf802fb05846974d00acd973616&language=en-US&page=1";
@@ -39,6 +40,16 @@ function App() {
     });
   };
 
+  //For Genre
+  useEffect(() => {
+    axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=bcf11cf802fb05846974d00acd973616&language=en-US')
+    .then(response =>{
+      // console.log("genre response", response.data.genres);
+      setFilteredByGenre(response.data.genres);
+    });
+  }, []);
+
+  // For sorting asc or desc
   const handleSorting = async (e) => {
     // important to use "slice" because we need to get a "copy" of array fileredSearchResults, because Array.sort does "in-place" sorting and modifies actual array, but
     // we don't want to modify filteredSearchResults array directly. Need to use React way
@@ -62,7 +73,7 @@ function App() {
   };
 
   
-
+  // For date input handler 
   const handleFiltering = async (e) => {
     const value = e.target.value;
     setfilterByDate({
@@ -70,16 +81,25 @@ function App() {
       [e.target.name]: value,
     });
 
-    console.log("first value", filterByDate.firstDate);
-    console.log("second value", filterByDate.lastDate);
-
-    
+    // console.log("first value", filterByDate.firstDate);
+    // console.log("second value", filterByDate.lastDate); 
   };
 
+  //search by date Button handler
   const handleFilteringByClick = () => {
     const x = filteredSearchResults.filter(m => m.release_date.split("-")[0] > filterByDate.firstDate && m.release_date.split("-")[0] < filterByDate.lastDate);
     setFilteredSearchResults(x);
   }
+
+  //   Genre Handler
+  const genreHandler = async (e) => {
+    console.log("asdasdasdasd",e.id);
+      const x = filteredByGenre.filter(e => e.id);
+      console.log("asdasdasdasd",x);
+      setFilteredSearchResults(x);
+    // console.log("genre clicked", e, filteredByGenre[0].id);
+  }
+
   return (
     <div className="App">
       <div className="title">Movie Search</div>
@@ -95,6 +115,7 @@ function App() {
         />
       </form>
 
+      {console.log("genre",filteredByGenre)}
       {/* show search results if available & sorting dropdown */}
       {filteredSearchResults.length > 0 && (
         <div>
@@ -131,7 +152,19 @@ function App() {
               />
               <button onClick={handleFilteringByClick}> Search </button>
             </div>
-            
+          </div>
+          <div>
+          <select className="genre-dropdown" onChange={(e) => genreHandler(e.target.value)} >
+              <option>Select</option>
+              {filteredByGenre.map((genre) => {
+                return(
+                  <option key={genre.id}>
+                    {genre.name}
+                    {genre.id}
+                  </option>
+                )  
+              })}
+            </select>
           </div>
 
           <div className="search-results-title">Search Results</div>
@@ -147,6 +180,7 @@ function App() {
 
       {orignalSearchResults.length === 0 && (
         <div>
+          
           <div className="popular-movie-title">Popular Movies</div>
           <div className="card-list">
             {/* Display Popular Movies, check against original search results - not filtered */}
