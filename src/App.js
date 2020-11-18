@@ -93,11 +93,9 @@ function App() {
 
   //   Genre Handler
   const genreHandler = async (e) => {
-    console.log("asdasdasdasd",e.id);
-      const x = filteredByGenre.filter(e => e.id);
-      console.log("asdasdasdasd",x);
-      setFilteredSearchResults(x);
-    // console.log("genre clicked", e, filteredByGenre[0].id);
+    const genreIdInt = parseInt(e);
+    const x = filteredSearchResults.filter(movie => movie.genre_ids.includes(genreIdInt));
+    setFilteredSearchResults(x);
   }
 
   return (
@@ -158,7 +156,7 @@ function App() {
               <option>Select</option>
               {filteredByGenre.map((genre) => {
                 return(
-                  <option key={genre.id}>
+                  <option value={genre.id} key={genre.id}>
                     {genre.name}
                     {genre.id}
                   </option>
