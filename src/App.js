@@ -94,11 +94,17 @@ function App() {
 
   //   Genre Handler
   const genreHandler = async (e) => {
-    console.log("value of e",e);
-    const genreIdInt = parseInt(e);
-    const x = filteredSearchResults.filter(movie => movie.genre_ids.includes(genreIdInt));
-    setFilteredSearchResults(x);
+    console.log("value of e", e);
+    // const genreIdInt = parseInt(e);
+    // const x = filteredSearchResults.filter(movie => movie.genre_ids.includes(genreIdInt));
+    // setFilteredSearchResults(x);
   }
+
+  const options1 = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
 
 //   const GenreData = () => {
 //     filteredByGenre.slice().map((genre) => {
@@ -166,16 +172,14 @@ function App() {
           </div>
           <div className="genre-dropdown">
             
-           <Select options= {
-             filteredByGenre.map((genre) => {
-                return(
-                 //genre.name
-                 console.log("asdasdas",genre.name)
-           )
-             })
-        }
-             isMulti
-             />
+          {/* <Select options={options1} /> */}
+           <Select 
+           onChange={genreHandler} 
+           options= {
+             filteredByGenre.map((genre) => { 
+               return { value: genre.id, label: genre.name }
+               })
+        } isMulti />
           {/* <select className="genre-dropdown" onChange={(e) => genreHandler(e.target.value)} >
               <option>Select</option>
               {filteredByGenre.map((genre) => {
