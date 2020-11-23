@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./Components/SearchMovie.css";
 import MovieCards from "./Components/MovieCards";
+import Select from 'react-select';
 import axios from "axios";
 
 function App() {
@@ -93,11 +94,23 @@ function App() {
 
   //   Genre Handler
   const genreHandler = async (e) => {
+    console.log("value of e",e);
     const genreIdInt = parseInt(e);
     const x = filteredSearchResults.filter(movie => movie.genre_ids.includes(genreIdInt));
     setFilteredSearchResults(x);
   }
 
+//   const GenreData = () => {
+//     filteredByGenre.slice().map((genre) => {
+//     return(
+
+//         genre.name
+
+//     )  
+//   })
+// }
+
+  //  console.log("poipippio", GenreData)
   return (
     <div className="App">
       <div className="title">Movie Search</div>
@@ -151,18 +164,29 @@ function App() {
               <button onClick={handleFilteringByClick}> Search </button>
             </div>
           </div>
-          <div>
-          <select className="genre-dropdown" onChange={(e) => genreHandler(e.target.value)} >
+          <div className="genre-dropdown">
+            
+           <Select options= {
+             filteredByGenre.map((genre) => {
+                return(
+                 //genre.name
+                 console.log("asdasdas",genre.name)
+           )
+             })
+        }
+             isMulti
+             />
+          {/* <select className="genre-dropdown" onChange={(e) => genreHandler(e.target.value)} >
               <option>Select</option>
               {filteredByGenre.map((genre) => {
                 return(
                   <option value={genre.id} key={genre.id}>
                     {genre.name}
-                    {genre.id}
                   </option>
                 )  
               })}
-            </select>
+              {GenreData}
+            </select> */}
           </div>
 
           <div className="search-results-title">Search Results</div>

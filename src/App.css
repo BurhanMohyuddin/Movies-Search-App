@@ -101,4 +101,7 @@ small {
 }
 .genre-dropdown {
   margin-top: 10px;
+  /* width:40%;
+  display:flex;
+  justify-content: center; */
 }
