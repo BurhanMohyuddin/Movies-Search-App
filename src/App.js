@@ -93,30 +93,41 @@ function App() {
   }
 
   //   Genre Handler
-  const genreHandler = async (e) => {
-    console.log("value of e", e);
+  const genreHandler = async (arrayOfSelectedGenreObjects) => {
+    if(!arrayOfSelectedGenreObjects || arrayOfSelectedGenreObjects.length <= 0){
+      <strong style={{alignContent:"center"}}>Result Not Found</strong>
+    }else{
+    console.log('array of selected genres objects', arrayOfSelectedGenreObjects);
+    const filteredMoviesWithSelectedGenres = filteredSearchResults.filter(movie => {
+      console.log('m', movie);
+      for (let index = 0; index < arrayOfSelectedGenreObjects.length; index++) {
+        const currentGenreObj = arrayOfSelectedGenreObjects[index];
+        if (movie.genre_ids.includes(currentGenreObj.value)) {
+          return true;
+        }
+      }
+      return false;
+    });
+    setFilteredSearchResults(filteredMoviesWithSelectedGenres);
+  }
+
+    // console.log("value of e", e);
+    // const x = e.map((arr) => {
+
+    //   return (
+    //      //console.log("getting id", arr.value)
+    //     filteredSearchResults.filter(movie => movie.genre_ids.includes(arr.value))
+    //   )
+    // })
+    // console.log("getting value",x);
+    
+   // setFilteredSearchResults(x);
+
     // const genreIdInt = parseInt(e);
     // const x = filteredSearchResults.filter(movie => movie.genre_ids.includes(genreIdInt));
     // setFilteredSearchResults(x);
   }
 
-  const options1 = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
-
-//   const GenreData = () => {
-//     filteredByGenre.slice().map((genre) => {
-//     return(
-
-//         genre.name
-
-//     )  
-//   })
-// }
-
-  //  console.log("poipippio", GenreData)
   return (
     <div className="App">
       <div className="title">Movie Search</div>
@@ -179,18 +190,7 @@ function App() {
              filteredByGenre.map((genre) => { 
                return { value: genre.id, label: genre.name }
                })
-        } isMulti />
-          {/* <select className="genre-dropdown" onChange={(e) => genreHandler(e.target.value)} >
-              <option>Select</option>
-              {filteredByGenre.map((genre) => {
-                return(
-                  <option value={genre.id} key={genre.id}>
-                    {genre.name}
-                  </option>
-                )  
-              })}
-              {GenreData}
-            </select> */}
+            } isMulti />
           </div>
 
           <div className="search-results-title">Search Results</div>
