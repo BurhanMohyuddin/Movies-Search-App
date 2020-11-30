@@ -152,9 +152,8 @@ function App() {
       </form>
 
       {console.log("genre",filteredByGenre)}
-      {/* show search results if available & sorting dropdown */}
-
-      {filteredSearchResults.length > 0 && (
+      {/* show search results and filters menu if search is active. We detect active search based on query string value */}
+      {query !== "" && (
         <div>
           <div className="dropdown">
             <select
@@ -204,11 +203,18 @@ function App() {
 
           <div className="search-results-title">Search Results</div>
           <div className="card-list">
-            {filteredSearchResults
+            {/* display cards only if filteredSearchResults array has something */}
+            {filteredSearchResults.length > 0 && filteredSearchResults
               .filter((movie) => movie.poster_path)
               .map((movie) => {
                 return <MovieCards movie={movie} key={movie.id} />;
               })}
+              {/* if filteredSearchResults is empty, show no serach results message */}
+              {filteredSearchResults.length === 0 && (
+                <div>
+                  <h2 class="search-results-title">No Search Results for given input and filters.</h2>
+                </div>
+              )}
           </div>
         </div>
       )}
