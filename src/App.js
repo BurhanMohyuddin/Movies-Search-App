@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./Components/SearchMovie.css";
 import MovieCards from "./Components/MovieCards";
+import { BrowserRouter } from 'react-router-dom';
 import Select from 'react-select';
 import axios from "axios";
 
@@ -10,12 +11,13 @@ function App() {
   const [filteredSearchResults, setFilteredSearchResults] = useState([]);
   const [orignalSearchResults, setOriginalSearchResults] = useState([]);
   const [filteredByGenre, setFilteredByGenre] = useState([]);
+  const [filterdByGenreToCheck, setFilteredByGenreToCheck] = useState([]);
   const [filterByDate, setfilterByDate] = useState({
     firstDate: "",
     lastDate: "",
   });
   const [query, setQuery] = useState("");
-
+ 
   useEffect(() => {
     const url ="https://api.themoviedb.org/3/movie/popular?api_key=bcf11cf802fb05846974d00acd973616&language=en-US&page=1";
     axios.get(url).then((response) => {
@@ -45,8 +47,10 @@ function App() {
   useEffect(() => {
     axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=bcf11cf802fb05846974d00acd973616&language=en-US')
     .then(response =>{
-      // console.log("genre response", response.data.genres);
+       console.log("genre response", response.data.genres);
       setFilteredByGenre(response.data.genres);
+      setFilteredByGenreToCheck(response.data.genres);
+
     });
   }, []);
 
@@ -94,9 +98,12 @@ function App() {
 
   //   Genre Handler
   const genreHandler = async (arrayOfSelectedGenreObjects) => {
-    if(!arrayOfSelectedGenreObjects || arrayOfSelectedGenreObjects.length <= 0){
-      <strong style={{alignContent:"center"}}>Result Not Found</strong>
-    }else{
+    // if(!arrayOfSelectedGenreObjects || arrayOfSelectedGenreObjects.length < 1){
+    //   setFilteredSearchResults("");
+    //  <p> <strong style={{alignContent:"center"}}><h2>Result Not Found</h2></strong> </p>
+    // console.log("no result")
+      
+    // }else{ 
     console.log('array of selected genres objects', arrayOfSelectedGenreObjects);
     const filteredMoviesWithSelectedGenres = filteredSearchResults.filter(movie => {
       console.log('m', movie);
@@ -108,8 +115,8 @@ function App() {
       }
       return false;
     });
-    setFilteredSearchResults(filteredMoviesWithSelectedGenres);
-  }
+     setFilteredSearchResults(filteredMoviesWithSelectedGenres);
+  //}
 
     // console.log("value of e", e);
     // const x = e.map((arr) => {
@@ -129,6 +136,7 @@ function App() {
   }
 
   return (
+    <BrowserRouter>
     <div className="App">
       <div className="title">Movie Search</div>
       <form className="form" onSubmit={(e) => e.preventDefault()}>
@@ -145,6 +153,7 @@ function App() {
 
       {console.log("genre",filteredByGenre)}
       {/* show search results if available & sorting dropdown */}
+
       {filteredSearchResults.length > 0 && (
         <div>
           <div className="dropdown">
@@ -182,7 +191,6 @@ function App() {
             </div>
           </div>
           <div className="genre-dropdown">
-            
           {/* <Select options={options1} /> */}
            <Select 
            onChange={genreHandler} 
@@ -190,7 +198,8 @@ function App() {
              filteredByGenre.map((genre) => { 
                return { value: genre.id, label: genre.name }
                })
-            } isMulti />
+            } isMulti 
+            noOptionsMessage={() => "Zero Result"}/>
           </div>
 
           <div className="search-results-title">Search Results</div>
@@ -203,6 +212,7 @@ function App() {
           </div>
         </div>
       )}
+
 
       {orignalSearchResults.length === 0 && (
         <div>
@@ -219,6 +229,7 @@ function App() {
         </div>
       )}
     </div>
+  </BrowserRouter>
   );
 }
 
